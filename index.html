@@ -10,7 +10,7 @@
 <body>
   <header class="container my-2">
     <label for="sl-opt">Selecione uma categoria para carregar o conteúdo: </label>
-    <select name="select-opt" id="sl-opt">
+    <select id="sl-opt" value="default" onchange="setOption($('#sl-opt'))">
       <option value="default">Selecione uma opção</option>
       <option value="posts">Posts</option>
       <option value="comments">Comentários</option>
@@ -23,5 +23,6 @@
 
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
