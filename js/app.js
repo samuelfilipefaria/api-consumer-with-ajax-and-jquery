@@ -1,15 +1,15 @@
 function setOption(optionsSelector) {
-  switch (optionsSelector.val()) {
-    case "posts":
-      console.log("posts")
-      break;
-    case "comments":
-      console.log("comments")
-      break;
-    case "photos":
-      console.log("photos")
-      break;
-    default:
-      console.log("Opção inválida!");
-  }
+  if(!isTheOptionValid(optionsSelector.val())) return;
+
+  consumeAPI(optionsSelector.val());
+}
+
+function isTheOptionValid(selectedOption) {
+  return ["posts", "comments", "photos"].includes(selectedOption);
+}
+
+function consumeAPI(resource) {
+  const baseUrl = "https://jsonplaceholder.typicode.com/";
+
+  $.ajax({url: baseUrl + resource}).done(response => console.log(response))
 }
