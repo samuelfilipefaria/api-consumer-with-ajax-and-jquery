@@ -67,16 +67,16 @@ function printComments(comments) {
 
   comments.forEach(comment => {
     contentContainer.html(contentContainer.html() + `
-      <div class="card" style="width: 100%;">
+      <div class="card mb-2" style="width: 100%; padding: 15px;">
         <div >
           <img src="img/generic_avatar.jpg" class="card-img-top user-photo" alt="..." style="width: 80px; height: 80px; border-radius: 50%; margin-right: 10px;">
           <h2 style="display: inline; vertical-align: middle;">${comment.name}</h2>
         </div>
         <div class="card-body">
           <p class="card-text">${comment.body}</p>
-          <img class="icon" src="img/email_icon.png" alt=""> <a href="mailto:Eliseo@gardner.biz">${comment.email}</a>
-          <img class="icon" src="img/like_icon.png" alt=""> <span class="icon-text">0</span>
-          <img class="icon" src="img/dislike_icon.png" alt=""> <span class="icon-text">0</span>
+          <img class="icon" src="img/email_icon.png" title="E-mail"> <a href="mailto:${comment.email}" style="text-decoration: none; vertical-align: middle;">${comment.email}</a>
+          <img class="icon" src="img/like_icon.png" title="Like" style="cursor: pointer; margin-left: 15px; margin-right: 5px; vertical-align: middle;"> <span class="icon-text" style="vertical-align: middle;">0</span>
+          <img class="icon" src="img/dislike_icon.png" title="Dislike" style="cursor: pointer; margin-left: 15px; margin-right: 5px; vertical-align: bottom;" <span class="icon-text" style="vertical-align: middle;">0</span>
         </div>
       </div>
     `)
@@ -136,9 +136,7 @@ function showModal(title, url) {
             <h1 class="modal-title fs-5" id="imageModalLabel">${title}</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-          <div class="modal-body">
-            <img src="${url}" class="img-fluid" alt="..." style="margin: 0;">
-          </div>
+          <img src="${url}" class="img-fluid" alt="..." style="margin: 0;">
         </div>
       </div>
     </div>
