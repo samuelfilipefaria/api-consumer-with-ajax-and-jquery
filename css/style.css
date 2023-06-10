@@ -1,3 +1,30 @@
+.loading-background {
+  background-color: #CCC;
+  opacity: .9;
+}
+
+.loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -75px;
+  margin-top: -45px;
+  text-align: center;
+  width: 150px;
+  height: 90px;
+  z-index: 10;
+  color: #fff;
+  font-weight: bold;
+  font-size: 30px;
+  display: none;
+}
+
+.loading img {
+  width: 50px;
+  height: 50px;
+  margin: auto;
+}
+
 .user-photo {
   border: solid 1px lightgray;
   padding: 5px;

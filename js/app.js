@@ -1,3 +1,5 @@
+const contentContainer = $("#content");
+
 function setOption(optionsSelector) {
   if(!isTheOptionValid(optionsSelector.val())) return;
 
@@ -8,22 +10,36 @@ function isTheOptionValid(selectedOption) {
   return ["posts", "comments", "photos"].includes(selectedOption);
 }
 
-function consumeAPI(resource) {
+async function consumeAPI(resource) {
   const baseUrl = "https://jsonplaceholder.typicode.com/";
 
-  $.ajax({url: baseUrl + resource}).done(response => showContent(response, resource))
+  clearContent(contentContainer);
+  turnOnLoading();
+
+  const result = await $.ajax({
+    url: baseUrl + resource
+  })
+
+  showContent(result, resource);
+}
+
+function turnOnLoading() {
+  $("#body").addClass("loading-background");
+  $("#loading").css("display", "block");
+}
+
+function turnOffLoading() {
+  $("#body").removeClass("loading-background");
+  $("#loading").css("display", "none");
 }
 
 function showContent(content, type) {
-  const contentContainer = $("#content");
-  clearContent(contentContainer)
-
   if(type == "posts") {
-    printPosts(content, contentContainer);
+    printPosts(content);
   } else if(type == "comments") {
-    printComments(content, contentContainer);
+    printComments(content);
   } else if(type == "photos") {
-    printPhotos(content, contentContainer);
+    printPhotos(content);
   }
 }
 
@@ -31,9 +47,11 @@ function clearContent(content) {
   content.html("");
 }
 
-function printPosts(posts, container) {
+function printPosts(posts) {
+  turnOffLoading();
+
   posts.forEach(post => {
-    container.html(container.html() + `
+    contentContainer.html(contentContainer.html() + `
       <div class="card mb-2" style="width: 100%;">
         <div class="card-body">
           <h5 class="card-title">${post.title}</h5>
@@ -44,9 +62,11 @@ function printPosts(posts, container) {
   });
 }
 
-function printComments(comments, container) {
+function printComments(comments) {
+  turnOffLoading();
+
   comments.forEach(comment => {
-    container.html(container.html() + `
+    contentContainer.html(contentContainer.html() + `
       <div class="card" style="width: 100%;">
         <div >
           <img src="img/generic_avatar.jpg" class="card-img-top user-photo" alt="..." style="width: 80px; height: 80px; border-radius: 50%; margin-right: 10px;">
@@ -63,12 +83,66 @@ function printComments(comments, container) {
   });
 }
 
-function printPhotos(photos, container) {
-  photos.forEach(photo => {
-    container.html(container.html() + `
-      <div class="card" style="width: 18rem;">
+function printPhotos(photos) {
+  turnOffLoading();
+
+  photosSplitted = [];
+  startPieace = 0;
+  endPieace = 100;
+
+  for(i = 0; i < 50; i++) {
+    photosSplitted.push(photos.slice(startPieace, endPieace));
+    startPieace = endPieace;
+    endPieace += 100;
+  }
+
+  nextIndex = 0;
+
+  photosSplitted[nextIndex].forEach(photo => {
+    contentContainer.html(contentContainer.html() + `
+      <div class="card" style="width: 18rem; padding: 5px; display: inline-block; margin-bottom: 20px; margin-right: 20px; cursor: pointer;" onclick="showModal('${photo.title}', '${photo.url}')">
         <img src="${photo.thumbnailUrl}" class="card-img-top" alt="...">
       </div>
-    `)
+    `);
   });
+
+  nextIndex++;
+
+  $(window).scroll(function () {
+    if ($(window).height() + $(window).scrollTop() == $(document).height()) {
+      console.log(nextIndex);
+
+      photosSplitted[nextIndex].forEach(photo => {
+        contentContainer.html(contentContainer.html() + `
+          <div class="card" style="width: 18rem; padding: 5px; display: inline-block; margin-bottom: 20px; margin-right: 20px; cursor: pointer;" onclick="showModal('${photo.title}', '${photo.url}')">
+            <img src="${photo.thumbnailUrl}" class="card-img-top" alt="...">
+          </div>
+        `);
+      });
+
+      nextIndex++;
+    }
+  });
+}
+
+function showModal(title, url) {
+  $("#modalArea").html("");
+
+  $("#modalArea").html(`
+    <div class="modal fade" style="padding: 0;" id="imageModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="imageModalLabel">${title}</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <img src="${url}" class="img-fluid" alt="..." style="margin: 0;">
+          </div>
+        </div>
+      </div>
+    </div>
+  `);
+
+  $('#imageModal').modal('show');
 }
