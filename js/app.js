@@ -110,8 +110,6 @@ function printPhotos(photos) {
 
   $(window).scroll(function () {
     if ($(window).height() + $(window).scrollTop() == $(document).height()) {
-      console.log(nextIndex);
-
       photosSplitted[nextIndex].forEach(photo => {
         contentContainer.html(contentContainer.html() + `
           <div class="card" style="width: 18rem; padding: 5px; display: inline-block; margin-bottom: 20px; margin-right: 20px; cursor: pointer;" onclick="showModal('${photo.title}', '${photo.url}')">
